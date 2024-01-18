@@ -1,8 +1,10 @@
 import sys
 import tkinter
 import tkinter.messagebox
+import pandas as pd
 from tkintermapview import TkinterMapView
 from pyswip import Prolog
+
 
 
 class App(tkinter.Tk):
@@ -129,14 +131,41 @@ class App(tkinter.Tk):
 ################################################################################################
 # STEP1: Define the knowledge base of illnesses and their symptoms
 
-prolog = Prolog()
+df = pd.read_csv('./Destinations.csv')
 
-prolog.retractall("destination(_, _, _, _, _, _, _, _, _, _, _, _, _)")
-prolog.assertz("destination('Tokyo', japan, 'East Asia', temperate, high, cultural, solo, long, asian, modern, mountains, luxury, japanese)")
-prolog.assertz("destination('Ottawa', canada, 'North America', cold, medium, adventure, family_friendly, medium, european, modern, forests, mid_range, english)")
-prolog.assertz("destination('Mexico City', mexico, 'North America', temperate, low, cultural, senior, short, latin_american, ancient, mountains, budget, spanish)")
-prolog.assertz("destination('Rome', italy, 'Southern Europe', temperate, high, cultural, solo, medium, european, ancient, beaches, luxury, italian)")
-prolog.assertz("destination('Brasilia', brazil, 'South America', tropical, low, adventure, family_friendly, long, latin_american, modern, beaches, budget, portuguese)")
+def empty_kb(prolog):
+    prolog.retractall("my_destination(_,_)")
+    prolog.retractall("country(_,_)")
+    prolog.retractall("region(_,_)")
+    prolog.retractall("climate(_,_)")
+    prolog.retractall("budget(_,_)")
+    prolog.retractall("activity(_,_)")
+    prolog.retractall("demographic(_,_)")
+    prolog.retractall("duration(_,_)")
+    prolog.retractall("cuisine(_,_)")
+    prolog.retractall("history(_,_)")
+    prolog.retractall("natural_wonder(_,_)")
+    prolog.retractall("accommodation(_,_)")
+    prolog.retractall("language(_,_)")
+
+
+prolog = Prolog()
+empty_kb(prolog)
+
+for i in df.index:
+    prolog.assertz(f"my_destination('{df['Destinations'][i]}')")
+    prolog.assertz(f"country('{df['country'][i]}')")
+    prolog.assertz(f"region('{df['region'][i]}')")
+    prolog.assertz(f"climate('{df['Climate'][i]}')")
+    prolog.assertz(f"budget('{df['Budget'][i]}')")
+    prolog.assertz(f"activity('{df['Activity'][i]}')")
+    prolog.assertz(f"demographic('{df['Demographics'][i]}')")
+    prolog.assertz(f"duration('{df['Duration'][i]}')")
+    prolog.assertz(f"cuisine('{df['Cuisine'][i]}')")
+    prolog.assertz(f"history('{df['History'][i]}')")
+    prolog.assertz(f"natural_wonder('{df['Natural Wonder'][i]}')")
+    prolog.assertz(f"accommodation('{df['Accommodation'][i]}')")
+    prolog.assertz(f"language('{df['Language'][i]}')")
 
 
 
